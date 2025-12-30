@@ -6,12 +6,7 @@ import dev.xerohero.filter.visitor.FilterVisitor;
 import java.util.Arrays;
 import java.util.Map;
 
-public class AndFilter implements Filter {
-    private final Filter[] filters;
-
-    public AndFilter(Filter... filters) {
-        this.filters = filters;
-    }
+public record AndFilter(Filter... filters) implements Filter {
 
     @Override
     public boolean matches(Map<String, String> resource) {
@@ -32,10 +27,6 @@ public class AndFilter implements Filter {
                         .toArray(String[]::new)) + ")";
     }
 
-    public Filter[] getFilters() {
-        return filters;
-    }
-    
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
         return visitor.visit(this);

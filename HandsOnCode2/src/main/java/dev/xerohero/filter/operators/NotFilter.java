@@ -5,12 +5,7 @@ import dev.xerohero.filter.visitor.FilterVisitor;
 
 import java.util.Map;
 
-public class NotFilter implements Filter {
-    private final Filter filter;
-
-    public NotFilter(Filter filter) {
-        this.filter = filter;
-    }
+public record NotFilter(Filter filter) implements Filter {
 
     @Override
     public boolean matches(Map<String, String> resource) {
@@ -22,10 +17,6 @@ public class NotFilter implements Filter {
         return "NOT " + filter.toString();
     }
 
-    public Filter getFilter() {
-        return filter;
-    }
-    
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
         return visitor.visit(this);

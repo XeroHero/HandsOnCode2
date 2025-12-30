@@ -1,6 +1,5 @@
 package dev.xerohero.filter.operators.comparison;
 
-import dev.xerohero.filter.Filter;
 import dev.xerohero.filter.operators.BaseComparisonFilter;
 import dev.xerohero.filter.visitor.FilterVisitor;
 
@@ -21,7 +20,7 @@ public class HasPropertyFilter extends BaseComparisonFilter {
     public String toString() {
         return "(" + key + " EXISTS)";
     }
-    
+
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
         return visitor.visit(this);
