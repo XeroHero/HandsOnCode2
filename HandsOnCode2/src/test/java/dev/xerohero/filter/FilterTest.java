@@ -68,8 +68,8 @@ public class FilterTest {
 
     @Test
     public void testLogicalOperators() {
-        Filter trueFilter = new TrueFilter();
-        Filter falseFilter = new FalseFilter();
+        Filter trueFilter = TrueFilter.INSTANCE;
+        Filter falseFilter = FalseFilter.INSTANCE;
 
         Map<String, String> user = new HashMap<>();
 
@@ -84,6 +84,10 @@ public class FilterTest {
 
         Filter notFilter = new NotFilter(falseFilter);
         assertTrue(notFilter.matches(user));
+        
+        // Verify singleton behavior
+        assertSame(TrueFilter.INSTANCE, trueFilter);
+        assertSame(FalseFilter.INSTANCE, falseFilter);
     }
 
     @Test
@@ -98,10 +102,10 @@ public class FilterTest {
         Filter greaterThan = new GreaterThanFilter("age", "20");
         assertTrue(greaterThan.matches(user));
 
-        Filter hasProperty = new HasPropertyFilter("name");
+        Filter hasProperty = new HasPropertyFiltre("name");
         assertTrue(hasProperty.matches(user));
 
-        Filter noProperty = new HasPropertyFilter("email");
+        Filter noProperty = new HasPropertyFiltre("email");
         assertFalse(noProperty.matches(user));
     }
 

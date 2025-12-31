@@ -8,7 +8,7 @@ import dev.xerohero.filter.operators.FalseFilter;
 import dev.xerohero.filter.operators.comparison.EqualsFilter;
 import dev.xerohero.filter.operators.comparison.GreaterThanFilter;
 import dev.xerohero.filter.operators.comparison.LessThanFilter;
-import dev.xerohero.filter.operators.comparison.HasPropertyFilter;
+import dev.xerohero.filter.operators.comparison.HasPropertyFiltre;
 import dev.xerohero.filter.operators.comparison.RegexFilter;
 
 /**
@@ -45,7 +45,7 @@ public class FilterBuilder {
      * Create a filter that checks if a property exists.
      */
     public static Filter hasProperty(String key) {
-        return new HasPropertyFilter(key);
+        return new HasPropertyFiltre(key);
     }
 
     /**

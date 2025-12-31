@@ -2,42 +2,12 @@
 
 [![Java Version](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Maven Central](https://img.shields.io/maven-central/v/dev.xerohero/filter-framework.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22dev.xerohero%22%20AND%20a:%22filter-framework%22)
 
-## 📚 Table of Contents
-- [Features](#-features)
-- [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Core Concepts](#-core-concepts)
-- [API Reference](#-api-reference)
-  - [Filter Interface](#filter-interface)
-  - [Logical Operators](#logical-operators)
-  - [Comparison Operators](#comparison-operators)
-  - [FilterBuilder](#filterbuilder)
-  - [Visitor Pattern](#visitor-pattern)
-- [Examples](#-examples)
-- [Performance Considerations](#-performance-considerations)
-- [Error Handling](#-error-handling)
-- [Advanced Usage](#-advanced-usage)
-- [Testing](#-testing)
-- [Contributing](#-contributing)
-- [License](#-license)
+A lightweight Java library for building and applying filters to collections of key-value pairs. Perfect for filtering resources based on various conditions.
 
-## ✨ Features
+## Getting Started
 
-- **Type-safe** filter construction
-- **Fluent API** for building complex filter expressions
-- **Extensible** architecture for custom filters
-- **Visitor pattern** implementation for filter traversal
-- **Comprehensive test coverage**
-- **Modern Java** (Java 17+ with records)
-- **Thread-safe** implementation
-- **Null-safe** operations
-- **Comprehensive error handling**
-
-## 📦 Installation
-
-Add the following dependency to your `pom.xml`:
+Add this to your project's `pom.xml`:
 
 ```xml
 <dependency>
@@ -47,20 +17,19 @@ Add the following dependency to your `pom.xml`:
 </dependency>
 ```
 
-## 🚀 Quick Start
+## Quick Example
 
 ```java
 import dev.xerohero.filter.FilterBuilder;
 import java.util.List;
 import java.util.Map;
 
-public class Main {
+public class Example {
     public static void main(String[] args) {
-        // Create a list of users
+        // Sample user data
         List<Map<String, String>> users = List.of(
             Map.of("name", "Alice", "age", "30", "role", "admin"),
-            Map.of("name", "Bob", "age", "25", "role", "user"),
-            Map.of("name", "Charlie", "age", "35", "role", "admin")
+            Map.of("name", "Bob", "age", "25", "role", "user")
         );
 
         // Create a filter: role is 'admin' AND age > 25
@@ -70,33 +39,55 @@ public class Main {
         );
 
         // Apply the filter
-        List<Map<String, String>> adminsOver25 = users.stream()
+        var filteredUsers = users.stream()
             .filter(filter::matches)
             .toList();
-            
-        System.out.println("Admins over 25: " + adminsOver25);
     }
 }
 ```
 
-## 🔍 Core Concepts
+## Features
 
-The Filter Framework is built around several key concepts:
+- Simple, fluent API for building filters
+- Support for common comparisons (equals, greater than, less than)
+- Logical operators (AND, OR, NOT)
+- Case-insensitive string comparison
+- Extensible through the visitor pattern
 
-### 1. Filter Interface
-All filters implement the `Filter` interface, which defines the core matching functionality and visitor pattern support.
+## Available Filters
 
-### 2. Logical Operators
-Combine multiple filters using logical operations (AND, OR, NOT).
+### Comparison Filters
+- `equals(key, value)`: Case-insensitive equality check
+- `greaterThan(key, value)`: Numeric or string comparison
+- `lessThan(key, value)`: Numeric or string comparison
+- `hasProperty(key)`: Checks if a property exists
+- `matchesRegex(key, pattern)`: Regex pattern matching
 
-### 3. Comparison Operators
-Perform specific comparisons on resource properties (equals, greater than, regex, etc.).
+### Logical Operators
+- `and(filter1, filter2, ...)`: All filters must match
+- `or(filter1, filter2, ...)`: Any filter can match
+- `not(filter)`: Inverts the result of a filter
 
-### 4. Visitor Pattern
-Enables operations on filters without modifying their classes, following the Open/Closed Principle.
+## Building Complex Filters
 
-### 5. Fluent API
-Build complex filter expressions in a readable, chainable way using `FilterBuilder`.
+```java
+// Example: Active admins or users with high score
+Filter complexFilter = FilterBuilder.or(
+    FilterBuilder.and(
+        FilterBuilder.equals("role", "admin"),
+        FilterBuilder.equals("status", "active")
+    ),
+    FilterBuilder.greaterThan("score", "1000")
+);
+```
+
+## Contributing
+
+Feel free to submit issues and pull requests. For major changes, please open an issue first to discuss your ideas.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 📖 API Reference
 

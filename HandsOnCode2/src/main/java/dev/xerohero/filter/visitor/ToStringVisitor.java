@@ -42,7 +42,7 @@ public class ToStringVisitor implements FilterVisitor<String> {
     }
 
     @Override
-    public String visit(HasPropertyFilter filter) {
+    public String visit(HasPropertyFiltre filter) {
         return "exists(" + filter.getKey() + ")";
     }
 

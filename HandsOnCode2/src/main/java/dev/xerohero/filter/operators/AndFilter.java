@@ -5,9 +5,48 @@ import dev.xerohero.filter.visitor.FilterVisitor;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
+/**
+ * A composite filter that implements a logical AND operation across multiple filters.
+ * <p>
+ * This filter returns {@code true} only if all of its component filters return {@code true}
+ * for a given resource. The evaluation is short-circuiting - it will stop at the first
+ * filter that returns {@code false}.
+ * </p>
+ *
+ * @param filters the array of filters to combine with AND logic (must not be null or empty)
+ * @throws IllegalArgumentException if no filters are provided
+ * @throws NullPointerException if the filters array or any filter is null
+ */
 public record AndFilter(Filter... filters) implements Filter {
+    
+    /**
+     * Creates a new AND filter with the specified filters.
+     *
+     * @param filters the filters to combine with AND logic
+     * @throws IllegalArgumentException if no filters are provided
+     * @throws NullPointerException if the filters array or any filter is null
+     */
+    public AndFilter {
+        if (filters == null || filters.length == 0) {
+            throw new IllegalArgumentException("At least one filter is required");
+        }
+        for (Filter filter : filters) {
+            Objects.requireNonNull(filter, "Filter cannot be null");
+        }
+    }
 
+    /**
+     * Evaluates the AND filter against the given resource.
+     * <p>
+     * Returns {@code true} if all component filters match the resource, {@code false} otherwise.
+     * The evaluation is short-circuiting - it stops at the first filter that doesn't match.
+     * </p>
+     *
+     * @param resource the resource to evaluate (may be null)
+     * @return {@code true} if all filters match the resource, {@code false} otherwise
+     */
     @Override
     public boolean matches(Map<String, String> resource) {
         // All filters must match
@@ -19,6 +58,15 @@ public record AndFilter(Filter... filters) implements Filter {
         return true;
     }
 
+    /**
+     * Returns a string representation of this AND filter.
+     * <p>
+     * The string is formatted as "(filter1 AND filter2 AND ...)" with proper
+     * grouping for nested filters.
+     * </p>
+     *
+     * @return a string representation of this filter
+     */
     @Override
     public String toString() {
         return "(" + String.join(" AND ",
@@ -27,8 +75,17 @@ public record AndFilter(Filter... filters) implements Filter {
                         .toArray(String[]::new)) + ")";
     }
 
+    /**
+     * Accepts a visitor for implementing the visitor pattern.
+     *
+     * @param <T> the type of the result
+     * @param visitor the visitor to accept (must not be null)
+     * @return the result of the visitor's visit method
+     * @throws NullPointerException if the visitor is null
+     */
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
+        Objects.requireNonNull(visitor, "Visitor cannot be null");
         return visitor.visit(this);
     }
 }

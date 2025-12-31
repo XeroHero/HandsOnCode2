@@ -1,42 +1,70 @@
 package dev.xerohero.filter.operators.comparison;
 
-import dev.xerohero.filter.Filter;
 import dev.xerohero.filter.operators.BaseComparisonFilter;
 import dev.xerohero.filter.visitor.FilterVisitor;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class RegexFilter extends BaseComparisonFilter implements Filter {
+/**
+ * A filter that checks if a resource's value matches a regular expression pattern.
+ * <p>
+ * The matching is performed in a case-insensitive manner by default. The pattern
+ * follows the standard Java {@link java.util.regex.Pattern} syntax.
+ * </p>
+ */
+public class RegexFilter extends BaseComparisonFilter {
     private final Pattern pattern;
     private final String regex;
 
+    /**
+     * Creates a new regex filter with the specified pattern.
+     *
+     * @param key The key to check in the resource
+     * @param regex The regular expression pattern to match against
+     * @throws IllegalArgumentException if the regex pattern is invalid
+     * @throws NullPointerException if either key or regex is null
+     */
     public RegexFilter(String key, String regex) {
         super(key);
-        this.regex = regex;
+        this.regex = Objects.requireNonNull(regex, "Regex pattern cannot be null");
         this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
     }
 
+    /**
+     * Checks if the resource's value matches the regex pattern.
+     *
+     * @param resource The resource map containing the value to check
+     * @return {@code true} if the value exists and matches the pattern, {@code false} otherwise
+     * @throws NullPointerException if the resource map is null
+     */
     @Override
     public boolean matches(Map<String, String> resource) {
         String actualValue = getValue(resource);
         if (actualValue == null) {
-            return false; // Property doesn't exist
+            return false; // Propery doesn't exist (TODO: log this?)
         }
         return pattern.matcher(actualValue).matches();
     }
 
     @Override
     public String toString() {
-        return "(" + key + " MATCHES '" + regex + "')";
+        return String.format("(%s MATCHES '%s')", getKey(), regex);
     }
 
+    /**
+     * Gets the regular expression pattern used by this filter.
+     *
+     * @return The regex pattern as a string
+     */
     public String getRegex() {
         return regex;
     }
     
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
+        // FIXME: Should we handle null visitor?
         return visitor.visit(this);
     }
 }

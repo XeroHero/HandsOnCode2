@@ -15,7 +15,7 @@ public interface FilterVisitor<T> {
     T visit(NotFilter filter);
     T visit(TrueFilter filter);
     T visit(FalseFilter filter);
-    T visit(HasPropertyFilter filter);
+    T visit(HasPropertyFiltre filter);
     T visit(EqualsFilter filter);
     T visit(LessThanFilter filter);
     T visit(GreaterThanFilter filter);
