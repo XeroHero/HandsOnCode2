@@ -18,13 +18,13 @@ import java.util.Objects;
  * @throws NullPointerException if the filters array or any filter is null
  */
 public record OrFilter(Filter... filters) implements Filter {
-    
+
     /**
      * Creates a new OR filter with the specified filters.
      *
      * @param filters the filters to combine with OR logic
      * @throws IllegalArgumentException if no filters are provided
-     * @throws NullPointerException if the filters array or any filter is null
+     * @throws NullPointerException     if the filters array or any filter is null
      */
     public OrFilter {
         if (filters == null || filters.length == 0) {
@@ -67,16 +67,13 @@ public record OrFilter(Filter... filters) implements Filter {
      */
     @Override
     public String toString() {
-        return "(" + String.join(" OR ",
-                Arrays.stream(filters)
-                        .map(Filter::toString)
-                        .toArray(String[]::new)) + ")";
+        return "(" + String.join(" OR ", Arrays.stream(filters).map(Filter::toString).toArray(String[]::new)) + ")";
     }
 
     /**
      * Accepts a visitor for implementing the visitor pattern.
      *
-     * @param <T> the type of the result
+     * @param <T>     the type of the result
      * @param visitor the visitor to accept (must not be null)
      * @return the result of the visitor's visit method
      * @throws NullPointerException if the visitor is null

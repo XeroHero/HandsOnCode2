@@ -13,16 +13,16 @@ import java.util.Map;
  * </p>
  */
 public final class FalseFilter implements Filter {
-    
+
     /**
      * The singleton instance of FalseFilter.
      */
     public static final FalseFilter INSTANCE = new FalseFilter();
-    
+
     public FalseFilter() {
         // Private constructor to enforce singleton pattern
     }
-    
+
     /**
      * Always returns {@code false}, regardless of the input.
      *
@@ -38,18 +38,18 @@ public final class FalseFilter implements Filter {
     public String toString() {
         return "FALSE";
     }
-    
+
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
         return visitor.visit(this);
     }
-    
+
     /**
      * Ensures that only one instance of FalseFilter exists.
      *
      * @return the singleton instance
      */
-    protected Object readResolve() {
+    private Object readResolve() {
         return INSTANCE;
     }
 }

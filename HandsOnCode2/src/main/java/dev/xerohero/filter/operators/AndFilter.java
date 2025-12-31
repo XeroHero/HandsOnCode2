@@ -20,13 +20,13 @@ import java.util.Objects;
  * @throws NullPointerException if the filters array or any filter is null
  */
 public record AndFilter(Filter... filters) implements Filter {
-    
+
     /**
      * Creates a new AND filter with the specified filters.
      *
      * @param filters the filters to combine with AND logic
      * @throws IllegalArgumentException if no filters are provided
-     * @throws NullPointerException if the filters array or any filter is null
+     * @throws NullPointerException     if the filters array or any filter is null
      */
     public AndFilter {
         if (filters == null || filters.length == 0) {
@@ -78,7 +78,7 @@ public record AndFilter(Filter... filters) implements Filter {
     /**
      * Accepts a visitor for implementing the visitor pattern.
      *
-     * @param <T> the type of the result
+     * @param <T>     the type of the result
      * @param visitor the visitor to accept (must not be null)
      * @return the result of the visitor's visit method
      * @throws NullPointerException if the visitor is null

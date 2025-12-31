@@ -1,8 +1,8 @@
 package dev.xerohero.filter.operators.comparison;
 
-import dev.xerohero.filter.Filter;
 import dev.xerohero.filter.operators.BaseComparisonFilter;
 import dev.xerohero.filter.visitor.FilterVisitor;
+
 import java.util.Map;
 
 /**
@@ -14,8 +14,8 @@ public class EqualsFilter extends BaseComparisonFilter {
 
     /**
      * Creates a new equals filter.
-     * 
-     * @param key The key to check in the resource
+     *
+     * @param key   The key to check in the resource
      * @param value The value to compare against (case-insensitive)
      */
     public EqualsFilter(String key, String value) {
@@ -39,13 +39,13 @@ public class EqualsFilter extends BaseComparisonFilter {
 
     /**
      * Gets the value to compare against.
-     * 
+     *
      * @return The comparison value
      */
     public String getValue() {
         return value;
     }
-    
+
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
         return visitor.visit(this);

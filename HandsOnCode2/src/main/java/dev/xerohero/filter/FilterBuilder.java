@@ -1,15 +1,7 @@
 package dev.xerohero.filter;
 
-import dev.xerohero.filter.operators.AndFilter;
-import dev.xerohero.filter.operators.OrFilter;
-import dev.xerohero.filter.operators.NotFilter;
-import dev.xerohero.filter.operators.TrueFilter;
-import dev.xerohero.filter.operators.FalseFilter;
-import dev.xerohero.filter.operators.comparison.EqualsFilter;
-import dev.xerohero.filter.operators.comparison.GreaterThanFilter;
-import dev.xerohero.filter.operators.comparison.LessThanFilter;
-import dev.xerohero.filter.operators.comparison.HasPropertyFiltre;
-import dev.xerohero.filter.operators.comparison.RegexFilter;
+import dev.xerohero.filter.operators.*;
+import dev.xerohero.filter.operators.comparison.*;
 
 /**
  * Builder class for creating filters in a fluent, readable way.
@@ -18,7 +10,8 @@ import dev.xerohero.filter.operators.comparison.RegexFilter;
 public class FilterBuilder {
 
     // Private constructor to prevent instantiation
-    private FilterBuilder() {}
+    private FilterBuilder() {
+    }
 
     /**
      * Create an AND filter that matches when ALL sub-filters match.

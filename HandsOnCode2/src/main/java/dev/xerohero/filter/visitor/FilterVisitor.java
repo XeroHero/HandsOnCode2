@@ -1,6 +1,5 @@
 package dev.xerohero.filter.visitor;
 
-import dev.xerohero.filter.Filter;
 import dev.xerohero.filter.operators.*;
 import dev.xerohero.filter.operators.comparison.*;
 
@@ -11,13 +10,22 @@ import dev.xerohero.filter.operators.comparison.*;
  */
 public interface FilterVisitor<T> {
     T visit(AndFilter filter);
+
     T visit(OrFilter filter);
+
     T visit(NotFilter filter);
+
     T visit(TrueFilter filter);
+
     T visit(FalseFilter filter);
+
     T visit(HasPropertyFiltre filter);
+
     T visit(EqualsFilter filter);
+
     T visit(LessThanFilter filter);
+
     T visit(GreaterThanFilter filter);
+
     T visit(RegexFilter filter);
 }

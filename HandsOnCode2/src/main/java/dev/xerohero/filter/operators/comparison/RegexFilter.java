@@ -21,10 +21,10 @@ public class RegexFilter extends BaseComparisonFilter {
     /**
      * Creates a new regex filter with the specified pattern.
      *
-     * @param key The key to check in the resource
+     * @param key   The key to check in the resource
      * @param regex The regular expression pattern to match against
      * @throws IllegalArgumentException if the regex pattern is invalid
-     * @throws NullPointerException if either key or regex is null
+     * @throws NullPointerException     if either key or regex is null
      */
     public RegexFilter(String key, String regex) {
         super(key);
@@ -61,7 +61,7 @@ public class RegexFilter extends BaseComparisonFilter {
     public String getRegex() {
         return regex;
     }
-    
+
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
         // FIXME: Should we handle null visitor?

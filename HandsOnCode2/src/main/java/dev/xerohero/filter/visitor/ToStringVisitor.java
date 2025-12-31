@@ -14,16 +14,12 @@ public class ToStringVisitor implements FilterVisitor<String> {
 
     @Override
     public String visit(AndFilter filter) {
-        return Arrays.stream(filter.filters())
-                .map(f -> f.accept(this))
-                .collect(Collectors.joining(" && ", "(", ")"));
+        return Arrays.stream(filter.filters()).map(f -> f.accept(this)).collect(Collectors.joining(" && ", "(", ")"));
     }
 
     @Override
     public String visit(OrFilter filter) {
-        return Arrays.stream(filter.filters())
-                .map(f -> f.accept(this))
-                .collect(Collectors.joining(" || ", "(", ")"));
+        return Arrays.stream(filter.filters()).map(f -> f.accept(this)).collect(Collectors.joining(" || ", "(", ")"));
     }
 
     @Override

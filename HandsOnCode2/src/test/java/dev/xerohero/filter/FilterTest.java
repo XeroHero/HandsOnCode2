@@ -1,14 +1,14 @@
 package dev.xerohero.filter;
 
-import dev.xerohero.filter.Filter;
 import dev.xerohero.filter.operators.*;
 import dev.xerohero.filter.operators.comparison.*;
 import dev.xerohero.filter.visitor.ToStringVisitor;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FilterTest {
 
@@ -47,10 +47,7 @@ public class FilterTest {
     @Test
     public void testComplexFilter() {
         // Example from PDF: "all administrators older than 30"
-        Filter filter = new AndFilter(
-                new EqualsFilter("role", "administrator"),
-                new GreaterThanFilter("age", "30")
-        );
+        Filter filter = new AndFilter(new EqualsFilter("role", "administrator"), new GreaterThanFilter("age", "30"));
 
         Map<String, String> user1 = new HashMap<>();
         user1.put("role", "administrator");
@@ -62,8 +59,7 @@ public class FilterTest {
         user2.put("age", "25");
         assertFalse(filter.matches(user2));
 
-        assertEquals("((role == 'administrator') AND (age > '30'))",
-                filter.toString());
+        assertEquals("((role == 'administrator') AND (age > '30'))", filter.toString());
     }
 
     @Test
@@ -84,7 +80,7 @@ public class FilterTest {
 
         Filter notFilter = new NotFilter(falseFilter);
         assertTrue(notFilter.matches(user));
-        
+
         // Verify singleton behavior
         assertSame(TrueFilter.INSTANCE, trueFilter);
         assertSame(FalseFilter.INSTANCE, falseFilter);
@@ -120,13 +116,7 @@ public class FilterTest {
 
     @Test
     public void testVisitorPattern() {
-        Filter complexFilter = new AndFilter(
-                new EqualsFilter("role", "admin"),
-                new OrFilter(
-                        new GreaterThanFilter("age", "30"),
-                        new EqualsFilter("department", "IT")
-                )
-        );
+        Filter complexFilter = new AndFilter(new EqualsFilter("role", "admin"), new OrFilter(new GreaterThanFilter("age", "30"), new EqualsFilter("department", "IT")));
 
         ToStringVisitor visitor = new ToStringVisitor();
         String result = complexFilter.accept(visitor);
@@ -136,10 +126,7 @@ public class FilterTest {
 
     @Test
     public void testFilterBuilder() {
-        Filter filter = FilterBuilder.and(
-                FilterBuilder.equals("role", "admin"),
-                FilterBuilder.greaterThan("age", "30")
-        );
+        Filter filter = FilterBuilder.and(FilterBuilder.equals("role", "admin"), FilterBuilder.greaterThan("age", "30"));
 
         Map<String, String> user = new HashMap<>();
         user.put("role", "admin");

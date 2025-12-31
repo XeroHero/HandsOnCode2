@@ -28,7 +28,7 @@ public abstract class BaseComparisonFilter implements Filter {
 
     /**
      * Retrieves the value associated with this filter's key from a resource.
-     * 
+     *
      * @param resource The resource map to get the value from
      * @return The value for the key, or null if not found
      * @throws NullPointerException if the resource map is null
@@ -40,16 +40,16 @@ public abstract class BaseComparisonFilter implements Filter {
 
     /**
      * Gets the key this filter operates on.
-     * 
+     *
      * @return The filter's key
      */
     public String getKey() {
         return key;
     }
-    
+
     @Override
     public abstract boolean matches(Map<String, String> resource);
-    
+
     @Override
     public abstract <T> T accept(FilterVisitor<T> visitor);
 }

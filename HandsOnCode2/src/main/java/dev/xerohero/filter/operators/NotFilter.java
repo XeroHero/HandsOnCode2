@@ -16,7 +16,7 @@ import java.util.Map;
  * @throws NullPointerException if the provided filter is null
  */
 public record NotFilter(Filter filter) implements Filter {
-    
+
     /**
      * Creates a new NOT filter that inverts the result of the specified filter.
      *
@@ -35,7 +35,7 @@ public record NotFilter(Filter filter) implements Filter {
      *
      * @param resource the resource to evaluate (may be null)
      * @return {@code true} if the underlying filter returns {@code false},
-     *         and vice versa
+     * and vice versa
      */
     @Override
     public boolean matches(Map<String, String> resource) {
@@ -55,7 +55,7 @@ public record NotFilter(Filter filter) implements Filter {
     /**
      * Accepts a visitor for implementing the visitor pattern.
      *
-     * @param <T> the type of the result
+     * @param <T>     the type of the result
      * @param visitor the visitor to accept (must not be null)
      * @return the result of the visitor's visit method
      * @throws NullPointerException if the visitor is null

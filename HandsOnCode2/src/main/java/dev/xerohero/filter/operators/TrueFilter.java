@@ -13,16 +13,16 @@ import java.util.Map;
  * </p>
  */
 public final class TrueFilter implements Filter {
-    
+
     /**
      * The singleton instance of TrueFilter.
      */
     public static final TrueFilter INSTANCE = new TrueFilter();
-    
+
     public TrueFilter() {
         // Private constructor to enforce singleton pattern
     }
-    
+
     /**
      * Always returns {@code true}, regardless of the input.
      *
@@ -38,18 +38,18 @@ public final class TrueFilter implements Filter {
     public String toString() {
         return "TRUE";
     }
-    
+
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
         return visitor.visit(this);
     }
-    
+
     /**
      * Ensures that only one instance of TrueFilter exists.
      *
      * @return the singleton instance
      */
-    protected Object readResolve() {
+    private Object readResolve() {
         return INSTANCE;
     }
 }

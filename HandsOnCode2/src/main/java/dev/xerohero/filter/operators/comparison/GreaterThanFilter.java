@@ -19,7 +19,7 @@ public class GreaterThanFilter extends BaseComparisonFilter {
     /**
      * Creates a new greater-than filter.
      *
-     * @param key The key to check in the resource
+     * @param key   The key to check in the resource
      * @param value The value to compare against
      * @throws IllegalArgumentException if value is null
      */
@@ -59,7 +59,7 @@ public class GreaterThanFilter extends BaseComparisonFilter {
     public String getValue() {
         return value;
     }
-    
+
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
         return visitor.visit(this); //TODO: Add null check here later

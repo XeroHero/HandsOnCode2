@@ -2,20 +2,7 @@
 
 [![Java Version](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 
-A lightweight Java library for building and applying filters to collections of key-value pairs. Perfect for filtering resources based on various conditions.
-
-## Getting Started
-
-Add this to your project's `pom.xml`:
-
-```xml
-<dependency>
-    <groupId>dev.xerohero</groupId>
-    <artifactId>HandsOnCode2</artifactId>
-    <version>1.0-SNAPSHOT</version>
-</dependency>
-```
-
+Project developed for Java JDK17 and above (tested on IntelliJ IDEA with OpenJDK 25, language level 25).
 ## Quick Example
 
 ```java
@@ -24,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Example {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         // Sample user data
         List<Map<String, String>> users = List.of(
             Map.of("name", "Alice", "age", "30", "role", "admin"),
@@ -47,7 +34,6 @@ public class Example {
 
 ## Features
 
-- Simple, fluent API for building filters
 - Support for common comparisons (equals, greater than, less than)
 - Logical operators (AND, OR, NOT)
 - Case-insensitive string comparison
@@ -172,7 +158,7 @@ public record OrFilter(Filter... filters) implements Filter {
 ```
 
 #### NotFilter
-Inverts the result of another filter.
+Takes a filter, evaluates it's result and inverts the result of this filter.
 
 ```java
 /**
@@ -314,7 +300,7 @@ public class GreaterThanFilter extends BaseComparisonFilter {
         String actualValue = getValue(resource);
         if (actualValue == null) return false;
         
-        // Try numeric comparison first
+        // Try numeric comparison first based ont he position of the characters in t
         try {
             double actual = Double.parseDouble(actualValue);
             double expected = Double.parseDouble(value);
@@ -886,7 +872,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         // Create a list of users
         List<Map<String, String>> users = List.of(
             Map.of("name", "Alice", "age", "30", "role", "admin"),
