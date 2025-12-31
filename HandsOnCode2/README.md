@@ -1,7 +1,6 @@
 # Filter Framework
 
 [![Java Version](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A lightweight Java library for building and applying filters to collections of key-value pairs. Perfect for filtering resources based on various conditions.
 
@@ -80,14 +79,6 @@ Filter complexFilter = FilterBuilder.or(
     FilterBuilder.greaterThan("score", "1000")
 );
 ```
-
-## Contributing
-
-Feel free to submit issues and pull requests. For major changes, please open an issue first to discuss your ideas.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 📖 API Reference
 
@@ -585,63 +576,6 @@ class UserRepositoryTest {
 }
 ```
 
-## 🤝 Contributing
-
-1. **Fork** the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add some amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. Open a **Pull Request**
-
-### Development Guidelines
-- Follow [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html)
-- Write **unit tests** for new features
-- Update **documentation** when adding new features
-- Keep the code **clean** and **readable**
-- Use **meaningful** commit messages
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 📚 Additional Resources
-
-- [Visitor Pattern](https://refactoring.guru/design-patterns/visitor)
-- [Java Collections Framework](https://docs.oracle.com/javase/8/docs/technotes/guides/collections/overview.html)
-- [Java Functional Programming](https://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html)
-- [Effective Java](https://www.oreilly.com/library/view/effective-java/9780134686097/)
-
-## 👥 Contributors
-
-- [Your Name](https://github.com/yourusername)
-
-## 🙏 Acknowledgments
-
-- Thanks to all contributors who have helped improve this project
-- Inspired by various filter implementations in popular Java frameworks
-
-## 📚 Table of Contents
-- [Core Concepts](#-core-concepts)
-- [API Reference](#-api-reference)
-  - [Filter Interface](#filter-interface)
-  - [Logical Operators](#logical-operators)
-    - [AndFilter](#andfilter)
-    - [OrFilter](#orfilter)
-    - [NotFilter](#notfilter)
-    - [TrueFilter/FalseFilter](#truefilter--falsefilter)
-  - [Comparison Operators](#comparison-operators)
-    - [BaseComparisonFilter](#basecomparisonfilter)
-    - [EqualsFilter](#equalsfilter)
-    - [GreaterThanFilter/LessThanFilter](#greaterthanfilter--lessthanfilter)
-    - [HasPropertyFilter](#haspropertyfilter)
-    - [RegexFilter](#regexfilter)
-  - [FilterBuilder](#filterbuilder)
-  - [Visitor Pattern](#visitor-pattern)
-- [Examples](#-examples)
-- [Advanced Usage](#-advanced-usage)
-- [Testing](#-testing)
-- [Contributing](#-contributing)
-
 ## 🔍 Core Concepts
 
 The Filter Framework is built around several key concepts:
@@ -944,41 +878,6 @@ Run tests with Maven:
 mvn test
 ```
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a new Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-A flexible and type-safe filter framework for Java that allows building complex filter expressions programmatically. This framework is designed to create, combine, and apply filters to collections of resources in a fluent and readable way.
-
-## ✨ Features
-
-- **Type-safe** filter construction
-- **Fluent API** for building complex filter expressions
-- **Extensible** architecture for custom filters
-- **Visitor pattern** implementation for filter traversal
-- **Comprehensive test coverage**
-- **Modern Java** (Java 17+ with records)
-
-## 📦 Installation
-
-Add the following dependency to your `pom.xml`:
-
-```xml
-<dependency>
-    <groupId>dev.xerohero</groupId>
-    <artifactId>HandsOnCode2</artifactId>
-    <version>1.0-SNAPSHOT</version>
-</dependency>
-```
-
 ## 🚀 Quick Start
 
 ```java
@@ -1093,10 +992,3 @@ Run the tests with Maven:
 mvn test
 ```
 
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
