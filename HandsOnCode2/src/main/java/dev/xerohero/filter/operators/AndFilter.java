@@ -9,11 +9,9 @@ import java.util.Objects;
 
 /**
  * A composite filter that implements a logical AND operation across multiple filters.
- * <p>
- * This filter returns {@code true} only if all of its component filters return {@code true}
+ * This filter returns true only if all of its component filters return true
  * for a given resource. The evaluation is short-circuiting - it will stop at the first
- * filter that returns {@code false}.
- * </p>
+ * filter that returns false.
  *
  * @param filters the array of filters to combine with AND logic (must not be null or empty)
  */
@@ -37,10 +35,8 @@ public record AndFilter(Filter... filters) implements Filter {
 
     /**
      * Evaluates the AND filter against the given resource.
-     * <p>
      * Returns true if all component filters match the resource, false otherwise.
      * The evaluation is short-circuiting - it stops at the first filter that doesn't match.
-     * </p>
      *
      * @param resource the resource to evaluate (may be null)
      * @return true if all filters match the resource, false otherwise
@@ -58,23 +54,18 @@ public record AndFilter(Filter... filters) implements Filter {
 
     /**
      * Returns a string representation of this AND filter.
-     * <p>
      * The string is formatted as "(filter1 AND filter2 AND ...)" with proper
      * grouping for nested filters.
-     * </p>
      *
      * @return a string representation of this filter
      */
     @Override
     public String toString() {
-        return "(" + String.join(" AND ",
-                Arrays.stream(filters)
-                        .map(Filter::toString)
-                        .toArray(String[]::new)) + ")";
+        return "(" + String.join(" AND ", Arrays.stream(filters).map(Filter::toString).toArray(String[]::new)) + ")";
     }
 
     /**
-     * Accepts a visitor for implementing the visitor pattern.
+     * Accepts a visitor to implement visitor pattern.
      *
      * @param <T>     the type of the result
      * @param visitor the visitor to accept (must not be null)

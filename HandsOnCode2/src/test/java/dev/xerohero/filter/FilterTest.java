@@ -15,8 +15,10 @@ public class FilterTest {
     @Test
     public void testEqualsFilter() {
         Map<String, String> user = new HashMap<>();
-        user.put("role", "administrator");
         user.put("firstname", "Joe");
+        user.put("lastname", "Bloggs");
+        user.put("role", "administrator");
+        user.put("age", "35");
 
         Filter filter = new EqualsFilter("role", "administrator");
 
