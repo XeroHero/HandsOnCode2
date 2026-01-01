@@ -1,7 +1,18 @@
 package dev.xerohero.filter.visitor;
 
+import dev.xerohero.filter.Filter;
 import dev.xerohero.filter.operators.*;
 import dev.xerohero.filter.operators.comparison.*;
+import dev.xerohero.filter.operators.AndFilter;
+import dev.xerohero.filter.operators.OrFilter;
+import dev.xerohero.filter.operators.NotFilter;
+import dev.xerohero.filter.operators.TrueFilter;
+import dev.xerohero.filter.operators.FalseFilter;
+import dev.xerohero.filter.operators.comparison.EqualsFilter;
+import dev.xerohero.filter.operators.comparison.GreaterThanFilter;
+import dev.xerohero.filter.operators.comparison.LessThanFilter;
+import dev.xerohero.filter.operators.comparison.RegexFilter;
+import dev.xerohero.filter.operators.comparison.HasPropertyFiltre;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -17,7 +28,13 @@ class ToStringVisitorTest {
     private final ToStringVisitor visitor = new ToStringVisitor();
 
     private static Stream<Arguments> provideEqualsTestCases() {
-        return Stream.of(Arguments.of("name", "test", "name == test"), Arguments.of("age", "25", "age == 25"), Arguments.of("isActive", "true", "isActive == true"), Arguments.of("price", "19.99", "price == 19.99"), Arguments.of("id", null, "id == null"));
+        return Stream.of(
+            Arguments.of("name", "test", "name == test"),
+            Arguments.of("age", "25", "age == 25"),
+            Arguments.of("isActive", "true", "isActive == true"),
+            Arguments.of("price", "19.99", "price == 19.99"),
+            Arguments.of("id", null, "id == null")
+        );
     }
 
     @Test
@@ -45,30 +62,44 @@ class ToStringVisitorTest {
     @Test
     void testVisitAndFilter() {
         // Single filter
-        String singleAnd = new AndFilter(TrueFilter.INSTANCE).accept(visitor);
+        String singleAnd = new AndFilter(new Filter[] { TrueFilter.INSTANCE }).accept(visitor);
         assertEquals("(true)", singleAnd);
 
         // Multiple filters
-        String multiAnd = new AndFilter(new EqualsFilter("name", "test"), new GreaterThanFilter("age", "25")).accept(visitor);
+        String multiAnd = new AndFilter(new Filter[] {
+            new EqualsFilter("name", "test"), 
+            new GreaterThanFilter("age", "25")
+        }).accept(visitor);
         assertEquals("(name == test && age > 25)", multiAnd);
 
         // Nested AND
-        String nestedAnd = new AndFilter(new AndFilter(TrueFilter.INSTANCE, FalseFilter.INSTANCE), new AndFilter(TrueFilter.INSTANCE)).accept(visitor);
+        String nestedAnd = new AndFilter(
+            new Filter[] {
+                new AndFilter(new Filter[] { TrueFilter.INSTANCE, FalseFilter.INSTANCE }), 
+                new AndFilter(new Filter[] { TrueFilter.INSTANCE })
+            }
+        ).accept(visitor);
         assertEquals("((true && false) && (true))", nestedAnd);
     }
 
     @Test
     void testVisitOrFilter() {
         // Single filter
-        String singleOr = new OrFilter(TrueFilter.INSTANCE).accept(visitor);
+        String singleOr = new OrFilter(new Filter[] { TrueFilter.INSTANCE }).accept(visitor);
         assertEquals("(true)", singleOr);
 
         // Multiple filters
-        String multiOr = new OrFilter(new EqualsFilter("status", "active"), new LessThanFilter("loginAttempts", "3")).accept(visitor);
+        String multiOr = new OrFilter(new Filter[] {
+            new EqualsFilter("status", "active"), 
+            new LessThanFilter("loginAttempts", "3")
+        }).accept(visitor);
         assertEquals("(status == active || loginAttempts < 3)", multiOr);
 
         // Nested OR
-        String nestedOr = new OrFilter(new OrFilter(TrueFilter.INSTANCE, FalseFilter.INSTANCE), new OrFilter(TrueFilter.INSTANCE)).accept(visitor);
+        String nestedOr = new OrFilter(new Filter[] {
+            new OrFilter(new Filter[] { TrueFilter.INSTANCE, FalseFilter.INSTANCE }), 
+            new OrFilter(new Filter[] { TrueFilter.INSTANCE })
+        }).accept(visitor);
         assertEquals("((true || false) || (true))", nestedOr);
     }
 
@@ -116,7 +147,21 @@ class ToStringVisitorTest {
     @Test
     void testComplexNestedExpression() {
         // Test a complex expression with multiple nested operations
-        AndFilter complexFilter = new AndFilter(new OrFilter(new EqualsFilter("role", "admin"), new AndFilter(new EqualsFilter("status", "active"), new GreaterThanFilter("loginCount", "10"))), new NotFilter(new OrFilter(new EqualsFilter("banned", "true"), new LessThanFilter("age", "18"))));
+        AndFilter complexFilter = new AndFilter(new Filter[] {
+            new OrFilter(new Filter[] {
+                new EqualsFilter("role", "admin"), 
+                new AndFilter(new Filter[] {
+                    new EqualsFilter("status", "active"), 
+                    new GreaterThanFilter("loginCount", "10")
+                })
+            }), 
+            new NotFilter(
+                new OrFilter(new Filter[] {
+                    new EqualsFilter("banned", "true"), 
+                    new LessThanFilter("age", "18")
+                })
+            )
+        });
 
         String expected = "((role == admin || (status == active && loginCount > 10)) && !(banned == true || age < 18))";
         String result = complexFilter.accept(visitor);
