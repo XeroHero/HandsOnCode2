@@ -5,13 +5,12 @@ import dev.xerohero.filter.visitor.FilterVisitor;
 
 import java.util.Map;
 
-/**
- * A filter that always evaluates to {@code true}.
- * <p>
+/**t
+ * A filter that always evaluates to True boolean value
  * This is an identity element for AND operations and a neutral element for OR operations.
  * It can be used as a default or fallback filter when no filtering is needed.
- * </p>
  */
+
 public final class TrueFilter implements Filter {
 
     /**

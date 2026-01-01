@@ -16,8 +16,6 @@ import java.util.Objects;
  * </p>
  *
  * @param filters the array of filters to combine with AND logic (must not be null or empty)
- * @throws IllegalArgumentException if no filters are provided
- * @throws NullPointerException if the filters array or any filter is null
  */
 public record AndFilter(Filter... filters) implements Filter {
 

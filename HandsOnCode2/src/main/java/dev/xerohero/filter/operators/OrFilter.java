@@ -14,8 +14,6 @@ import java.util.Objects;
  * as soon as it finds the first matching filter
  *
  * @param filters the array of filters to combine with OR logic (must not be null or empty)
- * @throws IllegalArgumentException if no filters are provided
- * @throws NullPointerException if the filters array or any filter is null
  */
 public record OrFilter(Filter... filters) implements Filter {
 

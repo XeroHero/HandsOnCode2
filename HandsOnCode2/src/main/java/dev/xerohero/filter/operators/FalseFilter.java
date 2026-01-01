@@ -8,7 +8,8 @@ import java.util.Map;
 /**
  * A filter that always evaluates to {@code false}.
  * <p>
- * This is an identity element for OR operations and an absorbing element for AND operations.
+ * This implemetns the singleton design pattern, with a single instance of the FalseFilter
+ * object being instantiated by this class.
  * It can be used to represent an impossible condition or to disable filtering.
  * </p>
  */

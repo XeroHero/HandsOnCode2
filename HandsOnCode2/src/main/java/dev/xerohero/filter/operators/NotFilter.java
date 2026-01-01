@@ -13,7 +13,6 @@ import java.util.Map;
  * </p>
  *
  * @param filter The filter to negate (must not be null)
- * @throws NullPointerException if the provided filter is null
  */
 public record NotFilter(Filter filter) implements Filter {
 

@@ -1,5 +1,6 @@
 package dev.xerohero.filter.operators.comparison;
 
+import dev.xerohero.filter.DebugLog;
 import dev.xerohero.filter.operators.BaseComparisonFilter;
 import dev.xerohero.filter.visitor.FilterVisitor;
 
@@ -8,11 +9,10 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
- * A filter that checks if a resource's value matches a regular expression pattern.
- * <p>
- * The matching is performed in a case-insensitive manner by default. The pattern
- * follows the standard Java {@link java.util.regex.Pattern} syntax.
- * </p>
+ *
+ * A filter that checks if a resource's value matches a regular expression (regex) pattern.
+ * The matching is performed in a case-insensitive manner by default.
+ *
  */
 public class RegexFilter extends BaseComparisonFilter {
     private final Pattern pattern;
@@ -41,9 +41,10 @@ public class RegexFilter extends BaseComparisonFilter {
      */
     @Override
     public boolean matches(Map<String, String> resource) {
-        String actualValue = getValue(resource);
-        if (actualValue == null) {
-            return false; // Propery doesn't exist (TODO: log this?)
+        String actualValue = getValue(resource); //value from resource key
+        if (actualValue == null) { // Propery doesn't exist
+            DebugLog.log("Property doesn't exist in resource map");
+            return false;
         }
         return pattern.matcher(actualValue).matches();
     }
@@ -64,7 +65,9 @@ public class RegexFilter extends BaseComparisonFilter {
 
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {
-        // FIXME: Should we handle null visitor?
-        return visitor.visit(this);
+        if (visitor == null) { //visitor is null
+            DebugLog.log("Null visitor");
+        }
+        return Objects.requireNonNull(visitor).visit(this);
     }
 }

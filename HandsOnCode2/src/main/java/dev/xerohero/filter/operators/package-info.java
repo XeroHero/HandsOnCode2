@@ -15,7 +15,6 @@
  *   <li>{@link dev.xerohero.filter.operators.comparison.EqualsFilter} - Case-insensitive equality</li>
  *   <li>{@link dev.xerohero.filter.operators.comparison.GreaterThanFilter} - Greater than comparison</li>
  *   <li>{@link dev.xerohero.filter.operators.comparison.LessThanFilter} - Less than comparison</li>
- *   <li>{@link dev.xerohero.filter.operators.comparison.HasPropertyFilter} - Property existence check</li>
  *   <li>{@link dev.xerohero.filter.operators.comparison.RegexFilter} - Regular expression matching</li>
  * </ul>
  *

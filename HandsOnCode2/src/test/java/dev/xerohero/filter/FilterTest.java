@@ -47,7 +47,10 @@ public class FilterTest {
     @Test
     public void testComplexFilter() {
         // Example from PDF: "all administrators older than 30"
-        Filter filter = new AndFilter(new EqualsFilter("role", "administrator"), new GreaterThanFilter("age", "30"));
+        Filter filter = new AndFilter(new Filter[] {
+            new EqualsFilter("role", "administrator"),
+            new GreaterThanFilter("age", "30")
+        });
 
         Map<String, String> user1 = new HashMap<>();
         user1.put("role", "administrator");
@@ -72,10 +75,10 @@ public class FilterTest {
         assertTrue(trueFilter.matches(user));
         assertFalse(falseFilter.matches(user));
 
-        Filter orFilter = new OrFilter(trueFilter, falseFilter);
+        Filter orFilter = new OrFilter(new Filter[] { trueFilter, falseFilter });
         assertTrue(orFilter.matches(user));
 
-        Filter andFilter = new AndFilter(trueFilter, falseFilter);
+        Filter andFilter = new AndFilter(new Filter[] { trueFilter, falseFilter });
         assertFalse(andFilter.matches(user));
 
         Filter notFilter = new NotFilter(falseFilter);
@@ -116,7 +119,13 @@ public class FilterTest {
 
     @Test
     public void testVisitorPattern() {
-        Filter complexFilter = new AndFilter(new EqualsFilter("role", "admin"), new OrFilter(new GreaterThanFilter("age", "30"), new EqualsFilter("department", "IT")));
+        Filter complexFilter = new AndFilter(new Filter[] {
+            new EqualsFilter("role", "admin"),
+            new OrFilter(new Filter[] {
+                new GreaterThanFilter("age", "30"),
+                new EqualsFilter("department", "IT")
+            })
+        });
 
         ToStringVisitor visitor = new ToStringVisitor();
         String result = complexFilter.accept(visitor);
@@ -126,7 +135,10 @@ public class FilterTest {
 
     @Test
     public void testFilterBuilder() {
-        Filter filter = FilterBuilder.and(FilterBuilder.equals("role", "admin"), FilterBuilder.greaterThan("age", "30"));
+        Filter filter = FilterBuilder.and(
+            FilterBuilder.equals("role", "admin"),
+            FilterBuilder.greaterThan("age", "30")
+        );
 
         Map<String, String> user = new HashMap<>();
         user.put("role", "admin");
@@ -156,5 +168,128 @@ public class FilterTest {
 
         Filter lessThan = new LessThanFilter("name", "Bob");
         assertTrue(lessThan.matches(user));
+    }
+
+    @Test
+    public void testEqualsFilterWithNullValue() {
+        Map<String, String> user = new HashMap<>();
+        user.put("role", null);
+
+        Filter filter = new EqualsFilter("role", null);
+        // The actual implementation returns false when comparing with null
+        assertFalse(filter.matches(user));
+    }
+
+    @Test
+    public void testEqualsFilterDifferentCase() {
+        Map<String, String> user = new HashMap<>();
+        user.put("name", "TestUser");
+
+        Filter filter = new EqualsFilter("name", "testuser");
+        assertTrue(filter.matches(user));
+    }
+
+    @Test
+    public void testLessThanFilterWithNonNumericValues() {
+        Map<String, String> user = new HashMap<>();
+        user.put("name", "Alice");
+
+        Filter filter = new LessThanFilter("name", "Bob");
+        assertTrue(filter.matches(user));
+    }
+
+    @Test
+    public void testGreaterThanFilterWithNonNumericValues() {
+        Map<String, String> user = new HashMap<>();
+        user.put("name", "Charlie");
+
+        Filter filter = new GreaterThanFilter("name", "Bob");
+        assertTrue(filter.matches(user));
+    }
+
+    @Test
+    public void testRegexFilterWithNullValue() {
+        Map<String, String> user = new HashMap<>();
+        user.put("email", null);
+
+        Filter filter = new RegexFilter("email", ".*@example\\.com");
+        assertFalse(filter.matches(user));
+    }
+
+    @Test
+    public void testNotFilterWithNullFilter() {
+        assertThrows(NullPointerException.class, () -> new NotFilter(null));
+    }
+
+    @Test
+    public void testAndFilterWithEmptyFilters() {
+        Filter[] emptyFilters = new Filter[0];
+        assertThrows(IllegalArgumentException.class, () -> new AndFilter(emptyFilters));
+    }
+
+    @Test
+    public void testOrFilterWithEmptyFilters() {
+        Filter[] emptyFilters = new Filter[0];
+        assertThrows(IllegalArgumentException.class, () -> new OrFilter(emptyFilters));
+    }
+
+    @Test
+    public void testFilterBuilderWithNullParameters() {
+        // Test null key in equals
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.equals(null, "value"));
+        
+        // Test null value is allowed in equals (to check for null values)
+        Filter equalsWithNullValue = FilterBuilder.equals("key", null);
+        assertNotNull(equalsWithNullValue);
+        
+        // Test empty filters
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.and());
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.or());
+        
+        // Test null filters in varargs
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.and((Filter) null));
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.or((Filter) null));
+        
+        // Test null filter for not
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.not(null));
+        
+        // Test null key for hasProperty
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.hasProperty(null));
+        
+        // Test null value for lessThan
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.lessThan("key", null));
+        
+        // Test null value for greaterThan
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.greaterThan("key", null));
+        
+        // Test null regex
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.matchesRegex("key", null));
+    }
+
+    @Test
+    public void testHasPropertyFilterWithNull() {
+        Map<String, String> user = new HashMap<>();
+        user.put("name", null);
+
+        Filter filter = new HasPropertyFiltre("name");
+        assertTrue(filter.matches(user));
+    }
+
+    @Test
+    public void testNotFilterToString() {
+        Filter notFilter = new NotFilter(TrueFilter.INSTANCE);
+        assertEquals("NOT TRUE", notFilter.toString());
+    }
+
+    @Test
+    public void testAndFilterWithSingleFilter() {
+        Filter andFilter = new AndFilter(new Filter[] { new EqualsFilter("role", "admin") });
+        assertEquals("((role == 'admin'))", andFilter.toString());
+    }
+
+    @Test
+    public void testOrFilterWithSingleFilter() {
+        Filter orFilter = new OrFilter(new Filter[] { new EqualsFilter("status", "active") });
+        assertEquals("((status == 'active'))", orFilter.toString());
     }
 }
