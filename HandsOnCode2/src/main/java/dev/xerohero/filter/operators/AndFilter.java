@@ -38,12 +38,12 @@ public record AndFilter(Filter... filters) implements Filter {
     /**
      * Evaluates the AND filter against the given resource.
      * <p>
-     * Returns {@code true} if all component filters match the resource, {@code false} otherwise.
+     * Returns true if all component filters match the resource, false otherwise.
      * The evaluation is short-circuiting - it stops at the first filter that doesn't match.
      * </p>
      *
      * @param resource the resource to evaluate (may be null)
-     * @return {@code true} if all filters match the resource, {@code false} otherwise
+     * @return true if all filters match the resource, false otherwise
      */
     @Override
     public boolean matches(Map<String, String> resource) {

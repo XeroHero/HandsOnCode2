@@ -31,7 +31,6 @@ public abstract class BaseComparisonFilter implements Filter {
      *
      * @param resource The resource map to get the value from
      * @return The value for the key, or null if not found
-     * @throws NullPointerException if the resource map is null
      */
     protected String getValue(Map<String, String> resource) {
         Objects.requireNonNull(resource, "Resource map cannot be null");

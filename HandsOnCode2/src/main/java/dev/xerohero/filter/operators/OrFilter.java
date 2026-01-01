@@ -36,12 +36,12 @@ public record OrFilter(Filter... filters) implements Filter {
     /**
      * Evaluates the OR filter against the given resource.
      * <p>
-     * Returns {@code true} if any component filter matches the resource, {@code false} otherwise.
-     * The evaluation is short-circuiting - it returns {@code true} at the first matching filter.
+     * Returns true if any component filter matches the resource, false otherwise.
+     * The evaluation is short-circuiting - it returns true at the first matching filter.
      * </p>
      *
      * @param resource the resource to evaluate which coul be null)
-     * @return {@code true} if any filter matches the resource, {@code false} otherwise
+     * @return true if any filter matches the resource, or  false otherwise
      */
     @Override
     public boolean matches(Map<String, String> resource) {

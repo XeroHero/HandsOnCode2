@@ -5,9 +5,8 @@ import dev.xerohero.filter.visitor.FilterVisitor;
 
 import java.util.Map;
 
-/**t
+/**
  * A filter that always evaluates to True boolean value
- * This is an identity element for AND operations and a neutral element for OR operations.
  * It can be used as a default or fallback filter when no filtering is needed.
  */
 
@@ -23,9 +22,9 @@ public final class TrueFilter implements Filter {
     }
 
     /**
-     * Always returns {@code true}, regardless of the input.
+     * Always returns true, regardless of the input.
      *
-     * @param resource The resource to check (ignored)
+     * @param resource The resource to check (not used as the return value true will alwasy be returned)
      * @return Always returns {@code true}
      */
     @Override

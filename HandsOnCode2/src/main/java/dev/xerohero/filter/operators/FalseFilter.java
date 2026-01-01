@@ -9,7 +9,7 @@ import java.util.Map;
  * A filter that always evaluates to {@code false}.
  * <p>
  * This implemetns the singleton design pattern, with a single instance of the FalseFilter
- * object being instantiated by this class.
+ * object being instantiated at most by this class at any time.
  * It can be used to represent an impossible condition or to disable filtering.
  * </p>
  */
@@ -28,7 +28,7 @@ public final class FalseFilter implements Filter {
      * Always returns {@code false}, regardless of the input.
      *
      * @param resource The resource to check (ignored)
-     * @return Always returns {@code false}
+     * @return Always returns false
      */
     @Override
     public boolean matches(Map<String, String> resource) {

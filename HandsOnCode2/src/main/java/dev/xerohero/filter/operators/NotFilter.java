@@ -8,8 +8,7 @@ import java.util.Map;
 /**
  * A filter that inverts the result of another filter.
  * <p>
- * This filter acts as a logical NOT operation, returning the opposite of what
- * the underlying filter would return for any given input.
+ * This filter acts as a logical NOT operation, returning the opposite of the input filter.
  * </p>
  *
  * @param filter The filter to negate (must not be null)
@@ -33,7 +32,7 @@ public record NotFilter(Filter filter) implements Filter {
      * of the underlying filter.
      *
      * @param resource the resource to evaluate (may be null)
-     * @return {@code true} if the underlying filter returns {@code false},
+     * @return true if the underlying filter returns false,
      * and vice versa
      */
     @Override
