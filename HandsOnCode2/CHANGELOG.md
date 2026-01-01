@@ -14,6 +14,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for common comparison operations (equals, greater than, regex, etc.)
 - Fluent FilterBuilder API for easy filter construction
 
+### Fixed
+- Improved test coverage for empty filter cases in `AndFilter` and `OrFilter`
+- Fixed test cases to properly handle empty filter array validations
+
+### Documentation
+- Added comprehensive test documentation covering all test classes and methods
+- Documented test coverage for core filter functionality, logical operators, and edge cases
+- Included details about test organization and best practices
+
 ### Changed
 - Improved error handling and input validation
 - Optimized performance for common filter operations
