@@ -1,5 +1,6 @@
 # HandsOnCode Assignment 2
 #### A filter system that uses the Visitor pattern to process and convert filter expressions into string representations
+[![Java CI with Maven](https://github.com/XeroHero/HandsOnCode2/actions/workflows/maven.yml/badge.svg)](https://github.com/XeroHero/HandsOnCode2/actions/workflows/maven.yml)
 [![Java Version](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 
 Project developed for Java JDK17 and above (tested on IntelliJ IDEA with OpenJDK 25 and OpenJDK 17, language level 25).
