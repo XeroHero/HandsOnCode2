@@ -13,7 +13,6 @@ import java.util.function.BiFunction;
 /**
  * Parser for filter expressions in a simple query language.
  * Supports basic comparisons and logical operators.
- * 
  * Example queries:
  * - name = "John"
  * - age > 25
@@ -89,7 +88,7 @@ public class FilterParser {
             if (left.isEmpty() || right.isEmpty()) {
                 throw new FilterParseException("Invalid AND expression: " + expr);
             }
-            return new AndFilter(parseSimpleExpression(left), parseSimpleExpression(right));
+            return new AndFilter(new Filter[]{parseSimpleExpression(left), parseSimpleExpression(right)});
         }
         
         int orPos = findTopLevelOperator(expr, "OR");
@@ -99,7 +98,7 @@ public class FilterParser {
             if (left.isEmpty() || right.isEmpty()) {
                 throw new FilterParseException("Invalid OR expression: " + expr);
             }
-            return new OrFilter(parseSimpleExpression(left), parseSimpleExpression(right));
+            return new OrFilter(new Filter[]{parseSimpleExpression(left), parseSimpleExpression(right)});
         }
         
         // Handle parentheses
