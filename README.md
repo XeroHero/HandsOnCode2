@@ -1,10 +1,19 @@
 # HandsOnCode Assignment 2
 #### A filter system that uses the Visitor pattern to process and convert filter expressions into string representations
+[![Java CI with Maven](https://github.com/XeroHero/HandsOnCode2/actions/workflows/maven.yml/badge.svg)](https://github.com/XeroHero/HandsOnCode2/actions/workflows/maven.yml)
 [![Java Version](https://img.shields.io/badge/Java-17+-blue.svg)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 
 Project developed for Java JDK17 and above (tested on IntelliJ IDEA with OpenJDK 25 and OpenJDK 17, language level 25).
 
 ⚠️To execute, enter the submodule folder (`HandsOnCode2 -> HandsOnCode2`). Due to my laptop's quirk, I had to structure it this way.
+
+## 🔍 Core Concepts
+
+The Filter Framework is built around several key concepts:
+2. **Logical Operators**: Combine multiple filters (AND, OR, NOT)
+3. **Comparison Operators**: Perform specific comparisons on resource properties
+4. **Visitor Pattern**: Enables operations on filters without modifying their classes
+5. **Fluent API**: Easy construction of complex filter expressions
 
 ### How it works
 
@@ -61,7 +70,21 @@ This design makes the code library useful for building and manipulating complex 
 - `and(filter1, filter2, ...)`: All filters must match
 - `or(filter1, filter2, ...)`: Any filter can match
 - `not(filter)`: Inverts the result of a filter
-`
+
+### FilterBuilder Methods
+
+| Method | Description | Example |
+|--------|-------------|---------|
+| `and(Filter...)` | Logical AND of multiple filters | `and(equals("a", "1"), equals("b", "2"))` |
+| `or(Filter...)` | Logical OR of multiple filters | `or(equals("role", "admin"), equals("role", "moderator"))` |
+| `not(Filter)` | Logical NOT of a filter | `not(equals("status", "banned"))` |
+| `equals(key, value)` | Case-insensitive equality | `equals("status", "active")` |
+| `greaterThan(key, value)` | Numeric or string comparison | `greaterThan("age", "18")` |
+| `lessThan(key, value)` | Numeric or string comparison | `lessThan("price", "100")` |
+| `hasProperty(key)` | Checks if property exists | `hasProperty("email")` |
+| `matchesRegex(key, regex)` | Matches against regex | `matchesRegex("email", ".+@.+\\..+")` |
+| `alwaysTrue()` | Always matches | `alwaysTrue()` |
+| `alwaysFalse()` | Never matches | `alwaysFalse()` |
 
 ## ⚡ Performance Considerations
 
@@ -107,28 +130,5 @@ This design makes the code library useful for building and manipulating complex 
 ## 🧪 Testing
 Test suite included in the code comprises 53 test cases, testing basic code functionality. This can be launched via the following command
 
-1. **Filter Interface**: The foundation that all filters implement
    `mvn test`
 
-## 🔍 Core Concepts
-
-The Filter Framework is built around several key concepts:
-2. **Logical Operators**: Combine multiple filters (AND, OR, NOT)
-3. **Comparison Operators**: Perform specific comparisons on resource properties
-4. **Visitor Pattern**: Enables operations on filters without modifying their classes
-5. **Fluent API**: Easy construction of complex filter expressions
-
-### FilterBuilder Methods
-
-| Method | Description | Example |
-|--------|-------------|---------|
-| `and(Filter...)` | Logical AND of multiple filters | `and(equals("a", "1"), equals("b", "2"))` |
-| `or(Filter...)` | Logical OR of multiple filters | `or(equals("role", "admin"), equals("role", "moderator"))` |
-| `not(Filter)` | Logical NOT of a filter | `not(equals("status", "banned"))` |
-| `equals(key, value)` | Case-insensitive equality | `equals("status", "active")` |
-| `greaterThan(key, value)` | Numeric or string comparison | `greaterThan("age", "18")` |
-| `lessThan(key, value)` | Numeric or string comparison | `lessThan("price", "100")` |
-| `hasProperty(key)` | Checks if property exists | `hasProperty("email")` |
-| `matchesRegex(key, regex)` | Matches against regex | `matchesRegex("email", ".+@.+\\..+")` |
-| `alwaysTrue()` | Always matches | `alwaysTrue()` |
-| `alwaysFalse()` | Never matches | `alwaysFalse()` |
