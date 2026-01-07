@@ -36,8 +36,7 @@ jobs:
     - name: RunMavenTest
       # You may pin to the exact commit or the version.
       # uses: Maes95/maven-action@27e3a6c3e9b40435ba5eebde5bbc2078678f9103
-      uses: Maes95/maven-action@1.1.0
-              
+      run: mvn -B test --file HandsOnCode2/pom.xml              
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Copy project pom to repo root for dependency submission
       run: cp HandsOnCode2/pom.xml .
