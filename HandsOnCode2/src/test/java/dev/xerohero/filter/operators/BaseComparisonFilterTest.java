@@ -58,7 +58,7 @@ class BaseComparisonFilterTest {
 
     private static class TestFilter extends BaseComparisonFilter {
         public TestFilter(String key) {
-            super(key);
+            super(key, "test-value"); // Provide a default value for testing
         }
 
         @Override

@@ -27,9 +27,27 @@ public class RegexFilter extends BaseComparisonFilter {
      * @throws NullPointerException     if either key or regex is null
      */
     public RegexFilter(String key, String regex) {
-        super(key);
+        super(key, regex);
         this.regex = Objects.requireNonNull(regex, "Regex pattern cannot be null");
         this.pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+    }
+
+    /**
+     * Gets the regex pattern string used by this filter.
+     *
+     * @return the regex pattern string
+     */
+    public String getPattern() {
+        return regex;
+    }
+
+    /**
+     * Gets the compiled Pattern object used for matching.
+     *
+     * @return the compiled Pattern object
+     */
+    public Pattern getCompiledPattern() {
+        return pattern;
     }
 
     /**

@@ -5,6 +5,7 @@ import dev.xerohero.filter.operators.comparison.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A fluent builder for creating filter expressions.
@@ -34,6 +35,9 @@ public class FilterBuilder {
     }
 
     public static Filter equalTo(String key, String value) {
+        if (key == null) {
+            throw new IllegalArgumentException("Key cannot be null");
+        }
         return new EqualsFilter(key, value);
     }
 
@@ -42,6 +46,8 @@ public class FilterBuilder {
     }
 
     public static Filter lessThan(String key, String value) {
+        Objects.requireNonNull(key, "Key cannot be null");
+        Objects.requireNonNull(value, "Value cannot be null");
         return new LessThanFilter(key, value);
     }
 
@@ -50,6 +56,8 @@ public class FilterBuilder {
     }
 
     public static Filter greaterThan(String key, String value) {
+        Objects.requireNonNull(key, "Key cannot be null");
+        Objects.requireNonNull(value, "Value cannot be null");
         return new GreaterThanFilter(key, value);
     }
 
@@ -58,6 +66,8 @@ public class FilterBuilder {
     }
 
     public static Filter matchesRegex(String key, String pattern) {
+        Objects.requireNonNull(key, "Key cannot be null");
+        Objects.requireNonNull(pattern, "Pattern cannot be null");
         return new RegexFilter(key, pattern);
     }
 
@@ -66,7 +76,26 @@ public class FilterBuilder {
     }
 
     public static Filter not(Filter filter) {
+        if (filter == null) {
+            throw new NullPointerException("Filter cannot be null");
+        }
         return new NotFilter(filter);
+    }
+    
+    /**
+     * Parses a filter expression string into a Filter object.
+     * 
+     * Example expressions:
+     * - name = "John"
+     * - age > 25
+     * - status = "active" AND (role = "admin" OR role = "superuser")
+     * 
+     * @param expression The filter expression to parse
+     * @return A Filter object representing the parsed expression
+     * @throws FilterParseException if the expression is invalid
+     */
+    public static Filter parse(String expression) {
+        return dev.xerohero.filter.parser.FilterParser.parse(expression);
     }
 
     public static Filter andFilter(Filter... filters) {

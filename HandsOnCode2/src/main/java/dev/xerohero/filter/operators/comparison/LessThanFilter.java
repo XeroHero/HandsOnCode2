@@ -5,18 +5,22 @@ import dev.xerohero.filter.ValueComparator;
 import dev.xerohero.filter.visitor.FilterVisitor;
 
 import java.util.Map;
-import java.util.Objects;
 
+/**
+ * A filter that checks if a resource's value is less than the specified value.
+ * Supports strict type checking for numeric comparisons.
+ */
 public class LessThanFilter extends BaseComparisonFilter {
-    private final String value;
 
+    /**
+     * Creates a new LessThanFilter with the specified key and value.
+     *
+     * @param key The key to compare against
+     * @param value The value to compare with
+     * @throws IllegalArgumentException if key is null/empty or value is not a valid number
+     */
     public LessThanFilter(String key, String value) {
-        super(key);
-        Objects.requireNonNull(value, "Comparison value cannot be null");
-        if (!isValidValue(value)) {
-            throw new IllegalArgumentException("Value must be a valid number, boolean, or non-empty string");
-        }
-        this.value = value;
+        super(key, value);
     }
 
     @Override
@@ -28,8 +32,9 @@ public class LessThanFilter extends BaseComparisonFilter {
 
         try {
             return ValueComparator.compare(actualValue, value) < 0;
-        } catch (NumberFormatException e) {
-            return false; // Invalid comparison, treat as non-matching
+        } catch (IllegalArgumentException e) {
+            // Type mismatch or invalid comparison, treat as non-matching
+            return false;
         }
     }
 
@@ -38,21 +43,6 @@ public class LessThanFilter extends BaseComparisonFilter {
         return String.format("(%s < '%s')", getKey(), value);
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    private boolean isValidValue(String value) {
-        if (value == null || value.trim().isEmpty()) {
-            return false;
-        }
-        try {
-            new ValueComparator.TypedValue(value);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
 
     @Override
     public <T> T accept(FilterVisitor<T> visitor) {

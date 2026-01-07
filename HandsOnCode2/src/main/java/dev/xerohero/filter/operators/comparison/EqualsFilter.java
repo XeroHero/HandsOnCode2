@@ -5,13 +5,23 @@ import dev.xerohero.filter.ValueComparator;
 import dev.xerohero.filter.visitor.FilterVisitor;
 
 import java.util.Map;
+import java.util.Objects;
 
+/**
+ * A filter that checks if a resource's value equals the specified value.
+ * Supports strict type checking and proper handling of different value types.
+ */
 public class EqualsFilter extends BaseComparisonFilter {
-    private final String value;
 
+    /**
+     * Creates a new EqualsFilter with the specified key and value.
+     *
+     * @param key The key to compare against
+     * @param value The value to compare with (can be null for null checks)
+     * @throws IllegalArgumentException if key is null or empty, or value is invalid
+     */
     public EqualsFilter(String key, String value) {
-        super(key);
-        this.value = value; // Allow null values
+        super(key, value);
     }
 
     @Override
@@ -27,29 +37,19 @@ public class EqualsFilter extends BaseComparisonFilter {
         }
 
         try {
-            ValueComparator.TypedValue tv1 = new ValueComparator.TypedValue(actualValue);
-            ValueComparator.TypedValue tv2 = new ValueComparator.TypedValue(value);
-
-            // For strings, do case-insensitive comparison
-            if (tv1.getType() == ValueComparator.ValueType.STRING &&
-                    tv2.getType() == ValueComparator.ValueType.STRING) {
-                return actualValue.equalsIgnoreCase(value);
-            }
-
-            // For other types, do exact comparison
             return ValueComparator.compare(actualValue, value) == 0;
-        } catch (NumberFormatException e) {
-            return false; // Invalid comparison, treat as non-matching
+        } catch (IllegalArgumentException e) {
+            // Type mismatch or invalid comparison, treat as non-matching
+            return false;
         }
     }
 
     @Override
     public String toString() {
-        return String.format("(%s %s '%s')", getKey(), value == null ? "is" : "==", value);
-    }
-
-    public String getValue() {
-        return value;
+        return String.format("(%s %s '%s')",
+                getKey(),
+                value == null ? "is" : "==",
+                value == null ? "null" : value);
     }
 
     @Override

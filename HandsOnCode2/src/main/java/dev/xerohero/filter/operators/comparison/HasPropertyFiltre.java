@@ -22,7 +22,7 @@ public class HasPropertyFiltre extends BaseComparisonFilter {
      * @throws IllegalArgumentException if key is null or empty
      */
     public HasPropertyFiltre(String key) {
-        super(key);
+        super(key, ""); // Value is not used for existence check
     }
 
     /**
@@ -36,7 +36,8 @@ public class HasPropertyFiltre extends BaseComparisonFilter {
     public boolean matches(Map<String, String> resource) {
         Objects.requireNonNull(resource, "Resource map can't be null");
         // Check if the resource has the specified key
-        return resource.containsKey(getKey()); // TODO: nested properties
+        // Note: We only check for the existence of the key, not its value
+        return resource.containsKey(getKey());
     }
 
     @Override

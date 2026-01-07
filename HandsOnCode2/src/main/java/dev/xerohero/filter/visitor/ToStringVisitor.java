@@ -59,6 +59,21 @@ public class ToStringVisitor implements FilterVisitor<String> {
 
     @Override
     public String visit(RegexFilter filter) {
-        return filter.getKey() + " matches " + filter.getRegex();
+        return filter.getKey() + " matches " + filter.getPattern();
+    }
+
+    @Override
+    public String visit(NotEqualsFilter filter) {
+        return filter.getKey() + " != " + filter.getValue();
+    }
+
+    @Override
+    public String visit(GreaterThanOrEqualFilter filter) {
+        return filter.getKey() + " >= " + filter.getValue();
+    }
+
+    @Override
+    public String visit(LessThanOrEqualFilter filter) {
+        return filter.getKey() + " <= " + filter.getValue();
     }
 }
