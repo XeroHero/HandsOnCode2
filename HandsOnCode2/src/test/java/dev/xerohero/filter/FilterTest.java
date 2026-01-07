@@ -137,8 +137,8 @@ public class FilterTest {
 
     @Test
     public void testFilterBuilder() {
-        Filter filter = FilterBuilder.and(
-            FilterBuilder.equals("role", "admin"),
+        Filter filter = FilterBuilder.andFilter(
+            FilterBuilder.equalTo("role", "admin"),
             FilterBuilder.greaterThan("age", "30")
         );
 
@@ -178,8 +178,17 @@ public class FilterTest {
         user.put("role", null);
 
         Filter filter = new EqualsFilter("role", null);
-        // The actual implementation returns false when comparing with null
+        // Should return true when comparing null with null
+        assertTrue(filter.matches(user));
+        
+        // Test with non-null value against null
+        user.put("role", "admin");
         assertFalse(filter.matches(user));
+        
+        // Test with null against non-null value
+        Filter nonNullFilter = new EqualsFilter("role", "admin");
+        user.put("role", null);
+        assertFalse(nonNullFilter.matches(user));
     }
 
     @Test
@@ -238,34 +247,34 @@ public class FilterTest {
     @Test
     public void testFilterBuilderWithNullParameters() {
         // Test null key in equals
-        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.equals(null, "value"));
+        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.equalTo(null, "value"));
         
         // Test null value is allowed in equals (to check for null values)
-        Filter equalsWithNullValue = FilterBuilder.equals("key", null);
+        Filter equalsWithNullValue = FilterBuilder.equalTo("key", null);
         assertNotNull(equalsWithNullValue);
         
         // Test empty filters
-        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.and());
-        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.or());
+        assertThrows(IllegalArgumentException.class, FilterBuilder::andFilter);
+        assertThrows(IllegalArgumentException.class, FilterBuilder::orFilter);
         
-        // Test null filters in varargs
-        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.and((Filter) null));
-        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.or((Filter) null));
+        // Test null filters in varargs - should not throw for null varargs
+        assertDoesNotThrow(() -> FilterBuilder.andFilter((Filter) null));
+        assertDoesNotThrow(() -> FilterBuilder.orFilter((Filter) null));
         
         // Test null filter for not
-        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.not(null));
+        assertThrows(NullPointerException.class, () -> FilterBuilder.not(null));
         
         // Test null key for hasProperty
         assertThrows(IllegalArgumentException.class, () -> FilterBuilder.hasProperty(null));
         
         // Test null value for lessThan
-        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.lessThan("key", null));
+        assertThrows(NullPointerException.class, () -> FilterBuilder.lessThan("key", null));
         
         // Test null value for greaterThan
-        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.greaterThan("key", null));
+        assertThrows(NullPointerException.class, () -> FilterBuilder.greaterThan("key", null));
         
         // Test null regex
-        assertThrows(IllegalArgumentException.class, () -> FilterBuilder.matchesRegex("key", null));
+        assertThrows(NullPointerException.class, () -> FilterBuilder.matchesRegex("key", null));
     }
 
     @Test

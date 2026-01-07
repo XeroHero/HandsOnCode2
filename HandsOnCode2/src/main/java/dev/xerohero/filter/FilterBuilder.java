@@ -3,160 +3,157 @@ package dev.xerohero.filter;
 import dev.xerohero.filter.operators.*;
 import dev.xerohero.filter.operators.comparison.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Builder class for creating filters in a fluent, readable way, using variable arguments (`Filter... filters`).
- * This makes it easier for clients to construct complex filters.
+ * A fluent builder for creating filter expressions.
+ * Example usage:
+ * <pre>
+ * Filter filter = FilterBuilder.and()
+ *     .equalTo("name", "John")
+ *     .greaterThan("age", "30")
+ *     .build();
+ * </pre>
  */
 public class FilterBuilder {
+    private final List<Filter> filters = new ArrayList<>();
+    private final boolean isAnd;
 
-    // Private constructor to prevent instantiation
-    private FilterBuilder() {}
-
-    /**
-     * Create an AND filter that matches when ALL sub-filters match.
-     */
-    public static Filter and(Filter... filters) {
-        if (filters == null || filters.length == 0) {
-            throw new IllegalArgumentException("At least one filter is required for AND operation");
-        }
-        for (Filter filter : filters) {
-            if (filter == null) {
-                throw new IllegalArgumentException("Filter cannot be null");
-            }
-        }
-        return new AndFilter(filters);
+    private FilterBuilder(boolean isAnd) {
+        this.isAnd = isAnd;
     }
 
-    /**
-     * Create an OR filter that matches when ANY sub-filter matches.
-     */
-    public static Filter or(Filter... filters) {
-        if (filters == null || filters.length == 0) {
-            throw new IllegalArgumentException("At least one filter is required for OR operation");
-        }
-        for (Filter filter : filters) {
-            if (filter == null) {
-                throw new IllegalArgumentException("Filter cannot be null");
-            }
-        }
-        return new OrFilter(filters);
+    // Factory methods
+    public static FilterBuilder and() {
+        return new FilterBuilder(true);
     }
 
-    /**
-     * Create a NOT filter that inverts another filter.
-     */
-    public static Filter not(Filter filter) {
-        if (filter == null) {
-            throw new IllegalArgumentException("Filter cannot be null");
-        }
-        return new NotFilter(filter);
+    public static FilterBuilder or() {
+        return new FilterBuilder(false);
     }
 
-    /**
-     * Create a filter that checks if a property exists.
-     */
-    public static Filter hasProperty(String key) {
-        if (key == null || key.trim().isEmpty()) {
-            throw new IllegalArgumentException("Key cannot be null or empty");
-        }
-        return new HasPropertyFiltre(key);
-    }
-
-    /**
-     * Create a filter that checks if a property equals a value (case-insensitive).
-     */
-    public static Filter equals(String key, String value) {
-        if (key == null || key.trim().isEmpty()) {
-            throw new IllegalArgumentException("Key cannot be null or empty");
-        }
-        // Note: value can be null for equals filter (to check for null values)
+    public static Filter equalTo(String key, String value) {
         return new EqualsFilter(key, value);
     }
 
-    /**
-     * Create a filter that checks if a property is less than a value.
-     * Tries numeric comparison first, falls back to string comparison.
-     */
+    public static Filter notEquals(String key, String value) {
+        return not(new EqualsFilter(key, value));
+    }
+
     public static Filter lessThan(String key, String value) {
-        if (key == null || key.trim().isEmpty()) {
-            throw new IllegalArgumentException("Key cannot be null or empty");
-        }
-        if (value == null) {
-            throw new IllegalArgumentException("Value cannot be null");
-        }
         return new LessThanFilter(key, value);
     }
 
-    /**
-     * Create a filter that checks if a property is greater than a value.
-     * Tries numeric comparison first, falls back to string comparison.
-     */
+    public static Filter lessThanOrEqual(String key, String value) {
+        return FilterBuilder.orFilter(new EqualsFilter(key, value), new LessThanFilter(key, value));
+    }
+
     public static Filter greaterThan(String key, String value) {
-        if (key == null || key.trim().isEmpty()) {
-            throw new IllegalArgumentException("Key cannot be null or empty");
-        }
-        if (value == null) {
-            throw new IllegalArgumentException("Value cannot be null");
-        }
         return new GreaterThanFilter(key, value);
     }
 
-    /**
-     * Create a filter that checks if a property matches a regex pattern.
-     */
-    public static Filter matchesRegex(String key, String regex) {
-        if (key == null || key.trim().isEmpty()) {
-            throw new IllegalArgumentException("Key cannot be null or empty");
+    public static Filter greaterThanOrEqual(String key, String value) {
+        return FilterBuilder.orFilter(new EqualsFilter(key, value), new GreaterThanFilter(key, value));
+    }
+
+    public static Filter matchesRegex(String key, String pattern) {
+        return new RegexFilter(key, pattern);
+    }
+
+    public static Filter hasProperty(String key) {
+        return new HasPropertyFiltre(key);
+    }
+
+    public static Filter not(Filter filter) {
+        return new NotFilter(filter);
+    }
+
+    public static Filter andFilter(Filter... filters) {
+        if (filters == null || filters.length == 0) {
+            throw new IllegalArgumentException("At least one filter is required");
         }
-        if (regex == null) {
-            throw new IllegalArgumentException("Regex pattern cannot be null");
+        return filters.length == 1 ? filters[0] : new AndFilter(filters);
+    }
+
+    public static Filter orFilter(Filter... filters) {
+        if (filters == null || filters.length == 0) {
+            throw new IllegalArgumentException("At least one filter is required");
         }
-        return new RegexFilter(key, regex);
+        return filters.length == 1 ? filters[0] : new OrFilter(filters);
     }
 
-    /**
-     * Create a filter that always matches.
-     */
-    public static Filter alwaysTrue() {
-        return new TrueFilter();
+    public static Filter all() {
+        return TrueFilter.INSTANCE;
     }
 
-    /**
-     * Create a filter that never matches.
-     */
-    public static Filter alwaysFalse() {
-        return new FalseFilter();
+    public static Filter none() {
+        return FalseFilter.INSTANCE;
     }
 
-    // test filter
-    public static Filter administratorsOlderThan30() {
-        return and(
-                equals("role", "administrator"),
-                greaterThan("age", "30")
-        );
+    // Chaining methods
+    public FilterBuilder withEqualTo(String key, String value) {
+        filters.add(FilterBuilder.equalTo(key, value));
+        return this;
     }
 
-
-//test filter
-    public static Filter ageBetween(int min, int max) {
-        return and(
-                greaterThan("age", String.valueOf(min - 1)), // > min-1 means >= min
-                lessThan("age", String.valueOf(max + 1))     // < max+1 means <= max
-        );
+    public FilterBuilder withNotEquals(String key, String value) {
+        filters.add(FilterBuilder.notEquals(key, value));
+        return this;
     }
 
-    /**
-     * Create a filter for role-based access.
-     */
-    public static Filter hasRole(String... roles) {
-        if (roles.length == 0) {
-            return alwaysFalse();
+    public FilterBuilder withLessThan(String key, String value) {
+        filters.add(FilterBuilder.lessThan(key, value));
+        return this;
+    }
+
+    public FilterBuilder withLessThanOrEqual(String key, String value) {
+        filters.add(FilterBuilder.lessThanOrEqual(key, value));
+        return this;
+    }
+
+    public FilterBuilder withGreaterThan(String key, String value) {
+        filters.add(FilterBuilder.greaterThan(key, value));
+        return this;
+    }
+
+    public FilterBuilder withGreaterThanOrEqual(String key, String value) {
+        filters.add(FilterBuilder.greaterThanOrEqual(key, value));
+        return this;
+    }
+
+    public FilterBuilder withMatchesRegex(String key, String pattern) {
+        filters.add(FilterBuilder.matchesRegex(key, pattern));
+        return this;
+    }
+
+    public FilterBuilder withHasProperty(String key) {
+        filters.add(hasProperty(key));
+        return this;
+    }
+
+    public FilterBuilder and(Filter... additionalFilters) {
+        if (additionalFilters != null && additionalFilters.length > 0) {
+            filters.add(FilterBuilder.andFilter(additionalFilters));
         }
+        return this;
+    }
 
-        Filter[] roleFilters = new Filter[roles.length];
-        for (int i = 0; i < roles.length; i++) {
-            roleFilters[i] = equals("role", roles[i]);
+    public FilterBuilder or(Filter... additionalFilters) {
+        if (additionalFilters != null && additionalFilters.length > 0) {
+            filters.add(FilterBuilder.orFilter(additionalFilters));
         }
-        return or(roleFilters);
+        return this;
+    }
+
+    public Filter build() {
+        if (filters.isEmpty()) {
+            return isAnd ? all() : none();
+        }
+        if (filters.size() == 1) {
+            return filters.get(0);
+        }
+        Filter[] filterArray = filters.toArray(new Filter[0]);
+        return isAnd ? new AndFilter(filterArray) : new OrFilter(filterArray);
     }
 }

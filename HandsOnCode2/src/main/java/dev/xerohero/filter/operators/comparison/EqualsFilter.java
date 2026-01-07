@@ -1,47 +1,53 @@
 package dev.xerohero.filter.operators.comparison;
 
 import dev.xerohero.filter.operators.BaseComparisonFilter;
+import dev.xerohero.filter.ValueComparator;
 import dev.xerohero.filter.visitor.FilterVisitor;
 
 import java.util.Map;
 
-/**
- * A filter that checks if a resource's value equals a specified value.
- * Performs case-insensitive comparison by default.
- */
 public class EqualsFilter extends BaseComparisonFilter {
     private final String value;
 
-    /**
-     * Creates a new equals filter.
-     *
-     * @param key   The key to check in the resource
-     * @param value The value to compare against (case-insensitive)
-     */
     public EqualsFilter(String key, String value) {
         super(key);
-        this.value = value;
+        this.value = value; // Allow null values
     }
 
     @Override
     public boolean matches(Map<String, String> resource) {
         String actualValue = getValue(resource);
+
+        // Handle null cases
         if (actualValue == null) {
-            return false; // Property doesn't exist
+            return value == null; // Both are null -> true, otherwise false
         }
-        return actualValue.equalsIgnoreCase(value);
+        if (value == null) {
+            return false; // actualValue is not null but value is null
+        }
+
+        try {
+            ValueComparator.TypedValue tv1 = new ValueComparator.TypedValue(actualValue);
+            ValueComparator.TypedValue tv2 = new ValueComparator.TypedValue(value);
+
+            // For strings, do case-insensitive comparison
+            if (tv1.getType() == ValueComparator.ValueType.STRING &&
+                    tv2.getType() == ValueComparator.ValueType.STRING) {
+                return actualValue.equalsIgnoreCase(value);
+            }
+
+            // For other types, do exact comparison
+            return ValueComparator.compare(actualValue, value) == 0;
+        } catch (NumberFormatException e) {
+            return false; // Invalid comparison, treat as non-matching
+        }
     }
 
     @Override
     public String toString() {
-        return String.format("(%s == '%s')", getKey(), value);
+        return String.format("(%s %s '%s')", getKey(), value == null ? "is" : "==", value);
     }
 
-    /**
-     * Gets the value to compare against.
-     *
-     * @return The comparison value
-     */
     public String getValue() {
         return value;
     }
